@@ -1,0 +1,10 @@
+{
+  "name": "oildrop-monorepo",
+  "private": true,
+  "workspaces": ["app", "functions"],
+  "scripts": {
+    "install:all": "npm install --workspaces",
+    "dev:emulators": "firebase emulators:start",
+    "dev:app": "cd app && npm start"
+  }
+}

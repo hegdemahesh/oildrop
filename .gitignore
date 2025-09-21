@@ -1,0 +1,11 @@
+node_modules/
+app/node_modules/
+functions/node_modules/
+dist/
+functions/lib/
+app/.expo/
+app/web-build/
+.env
+app/.env
+package-lock.json
+functions/.runtimeconfig.json

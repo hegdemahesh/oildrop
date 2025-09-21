@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner() { return signedIn() && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.role == 'owner'; }
+    function isAdminOrOwner() {
+      return signedIn() && (
+        get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.role in ['admin','owner']
+      );
+    }
+
+    match /inventory/{id} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdminOrOwner();
+    }
+    match /customers/{id} {
+      allow read, create, update: if isAdminOrOwner();
+      allow delete: if isOwner();
+    }
+    match /invoices/{id} {
+      allow read: if isAdminOrOwner();
+      allow create: if isAdminOrOwner();
+      allow update, delete: if false; // immutable once written
+    }
+    match /roles/{uid} {
+      allow read: if isAdminOrOwner();
+      allow write: if isOwner();
+    }
+  }
+}
