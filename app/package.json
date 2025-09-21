@@ -17,6 +17,7 @@
     "expo": "~51.0.0",
     "expo-auth-session": "~5.5.0",
     "expo-constants": "^15.0.0",
+    "expo-firebase-recaptcha": "^2.3.1",
     "expo-linking": "~6.3.1",
     "expo-router": "~3.5.24",
     "expo-status-bar": "~1.12.1",
