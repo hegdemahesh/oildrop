@@ -1,6 +1,7 @@
+/// <reference types="vite/client" />
 import { initializeApp, getApps } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,4 +19,15 @@ if (!getApps().length) {
 
 export const auth = getAuth();
 export const db = getFirestore();
+
+// Connect emulators in development (when running locally without production host)
+if (import.meta.env.MODE === 'development') {
+  try {
+    connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+  } catch {}
+  try {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+  } catch {}
+}
+
 export const googleProvider = new GoogleAuthProvider();
