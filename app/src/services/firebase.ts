@@ -1,4 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
@@ -23,6 +24,10 @@ export function initFirebase() {
     try { connectAuthEmulator(auth, 'http://127.0.0.1:9099'); } catch {}
     try { connectFirestoreEmulator(getFirestore(), '127.0.0.1', 8080); } catch {}
     try { connectStorageEmulator(getStorage(), '127.0.0.1', 9199); } catch {}
+  }
+  // Analytics only on web & production (optional guard)
+  if (typeof window !== 'undefined' && process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID) {
+    isSupported().then(ok => { if (ok) getAnalytics(); });
   }
   initialized = true;
 }

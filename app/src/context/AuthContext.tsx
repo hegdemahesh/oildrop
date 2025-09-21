@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 import { User, getAuth, GoogleAuthProvider, signInWithCredential, onAuthStateChanged, signOut } from 'firebase/auth';
-import * as AuthSession from 'expo-auth-session';
+import * as Google from 'expo-auth-session/providers/google';
+import * as WebBrowser from 'expo-web-browser';
 import { initFirebase } from '../services/firebase';
 
 interface AuthContextValue {
@@ -30,18 +32,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return () => unsub();
   }, []);
 
+  WebBrowser.maybeCompleteAuthSession();
+
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
+    androidClientId: process.env.EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID,
+    expoClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    scopes: ['profile', 'email']
+  });
+
+  useEffect(() => {
+    const doSignIn = async () => {
+      if (response?.type === 'success') {
+        const { authentication } = response;
+        if (!authentication?.idToken) return;
+        const cred = GoogleAuthProvider.credential(authentication.idToken);
+        await signInWithCredential(auth, cred);
+      }
+    };
+    doSignIn();
+  }, [response]);
+
   const signInWithGoogle = async () => {
+    if (!request) {
+      console.warn('Google auth request not ready');
+      return;
+    }
     setLoading(true);
     try {
-      const redirectUri = AuthSession.makeRedirectUri({ useProxy: true });
-      const provider = new GoogleAuthProvider();
-      // Use Expo AuthSession + Google Identity if needed (placeholder simplified)
-      // In production: implement proper PKCE/OAuth flow; here we assume credential retrieval.
-      // This is a placeholder stub for rapid scaffold.
-      throw new Error('Google sign-in flow needs implementation with AuthSession');
+      await promptAsync({ useProxy: Platform.select({ web: false, default: true }) });
     } catch (e) {
       console.warn(e);
-    } finally {
       setLoading(false);
     }
   };

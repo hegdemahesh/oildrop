@@ -26,7 +26,12 @@ oildrop/
 - Java JDK + Android Studio (for Android), Xcode (for iOS)
 
 ## 2. Environment Variables
-Copy `app/.env.example` to `app/.env` and fill in Firebase web config.
+Copy `app/.env.example` to `app/.env` (values for production already prefilled for project `lubelogix`; replace Google OAuth client IDs):
+
+Required additions (obtain from Google Cloud Console OAuth credentials):
+- EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID
+- EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID
+- EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID
 
 For local emulators the SDK auto-detects if you call `connectEmulator` helpers.
 
@@ -70,7 +75,7 @@ firebase deploy --only functions
 ```
 
 ## 8. Features (Initial Scaffold)
-Implemented (scaffold / placeholder logic):
+Implemented (scaffold / placeholder logic) now targeting Firebase project `lubelogix`:
 - Google (Gmail) sign-in using Firebase Auth & Expo AuthSession
 - Role-based context (Owner/Admin) placeholder
 - Navigation: Login -> Dashboard -> Customers / Inventory / Sales
