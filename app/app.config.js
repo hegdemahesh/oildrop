@@ -10,6 +10,7 @@ export default {
     bundler: "metro",
     output: "static"
   },
+  plugins: ["expo-router"],
   experiments: {
     typedRoutes: true
   }
