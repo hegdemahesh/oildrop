@@ -188,7 +188,7 @@ const Inventory: React.FC = () => {
                 <th>Name</th>
                 <th>Volume (ml)</th>
                 <th>Quantity</th>
-                <th className="w-40">Actions</th>
+                <th className="w-40 print:hidden">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -209,14 +209,14 @@ const Inventory: React.FC = () => {
                       <input type="number" className="input input-xs bg-slate-900 w-24" value={editValues.volumeMl||''} onChange={e=>setEditValues(v=>({...v,volumeMl:parseInt(e.target.value,10)||0}))} />
                     ) : it.volumeMl}
                   </td>
-                  <td>
+                  <td className="print:align-top">
                     <div className="flex items-center gap-1">
                       {editingId === it.id ? (
                         <input type="number" className="input input-xs bg-slate-900 w-20" value={editValues.quantity||''} onChange={e=>setEditValues(v=>({...v,quantity:parseInt(e.target.value,10)||0}))} />
                       ) : (
                         <>
                           <span>{it.quantity}</span>
-                          <div className="flex flex-col ml-1">
+                          <div className="flex flex-col ml-1 print:hidden">
                             <button className="btn btn-[6px] btn-xs h-4 min-h-0" onClick={()=>adjustQuantity(it.id, 1)}>▲</button>
                             <button className="btn btn-[6px] btn-xs h-4 min-h-0" onClick={()=>adjustQuantity(it.id, -1)}>▼</button>
                           </div>
@@ -224,7 +224,7 @@ const Inventory: React.FC = () => {
                       )}
                     </div>
                   </td>
-                  <td>
+                  <td className="print:hidden">
                     {editingId === it.id ? (
                       <div className="flex gap-2">
                         <button className="btn btn-xs btn-success" disabled={submitting} onClick={saveEdit}>Save</button>
