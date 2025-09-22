@@ -38,7 +38,8 @@ if (!getApps().length && firebaseConfig.apiKey) {
 
 export const auth = getAuth();
 export const db = getFirestore();
-export const functions = getFunctions();
+// Explicitly specify region to match deployed/defined region (us-central1)
+export const functions = getFunctions(undefined, 'us-central1');
 
 // Connect emulators in development (when running locally without production host)
 if (import.meta.env.MODE === 'development') {
@@ -50,6 +51,9 @@ if (import.meta.env.MODE === 'development') {
   } catch {}
   try {
     connectFunctionsEmulator(functions, 'localhost', 5001);
+    // Useful one-time log to confirm emulator binding & project ID
+    // eslint-disable-next-line no-console
+    console.log('[Firebase] Connected Functions emulator (us-central1)');
   } catch {}
 }
 

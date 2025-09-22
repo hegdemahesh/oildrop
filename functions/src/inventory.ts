@@ -20,7 +20,8 @@ function validateItem(item: any): asserts item is InventoryInput {
   if (errors.length) throw new functions.https.HttpsError('invalid-argument', errors.join('; '));
 }
 
-export const addInventoryItem = functions.https.onCall(async (data, context) => {
+// Explicitly pin region to avoid accidental multi-region mismatch (default is us-central1 but this is clearer)
+export const addInventoryItem = functions.region('us-central1').https.onCall(async (data, context) => {
   if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
   validateItem(data);
   const db = admin.firestore();
@@ -36,7 +37,7 @@ export const addInventoryItem = functions.https.onCall(async (data, context) => 
   return { id: doc.id };
 });
 
-export const bulkImportInventory = functions.https.onCall(async (data, context) => {
+export const bulkImportInventory = functions.region('us-central1').https.onCall(async (data, context) => {
   if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
   if (!Array.isArray(data)) throw new functions.https.HttpsError('invalid-argument', 'Expected array');
   const db = admin.firestore();
