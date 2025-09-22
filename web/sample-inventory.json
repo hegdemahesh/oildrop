@@ -1,10 +1,10 @@
 [
-  { "brand": "Castrol", "name": "GTX 20W-50", "volumeMl": 1000, "quantity": 24 },
-  { "brand": "Castrol", "name": "Magnatec 5W-30", "volumeMl": 3500, "quantity": 10 },
-  { "brand": "Shell", "name": "Helix HX5 15W-40", "volumeMl": 1000, "quantity": 36 },
-  { "brand": "Shell", "name": "Helix Ultra 5W-40", "volumeMl": 4000, "quantity": 8 },
-  { "brand": "Mobil", "name": "Super 1000 20W-50", "volumeMl": 1000, "quantity": 30 },
-  { "brand": "Mobil", "name": "1 FS 0W-40", "volumeMl": 1000, "quantity": 16 },
-  { "brand": "Valvoline", "name": "Premium Blue 15W-40", "volumeMl": 1000, "quantity": 20 },
-  { "brand": "Motul", "name": "300V Power 5W-40", "volumeMl": 2000, "quantity": 6 }
+  { "brand": "Castrol", "name": "GTX 20W-50", "volumeMl": 1000, "quantity": 24, "purchasePrice": 280, "sellingPrice": 350 },
+  { "brand": "Castrol", "name": "Magnatec 5W-30", "volumeMl": 3500, "quantity": 10, "purchasePrice": 1850, "sellingPrice": 2150 },
+  { "brand": "Shell", "name": "Helix HX5 15W-40", "volumeMl": 1000, "quantity": 36, "purchasePrice": 300, "sellingPrice": 375 },
+  { "brand": "Shell", "name": "Helix Ultra 5W-40", "volumeMl": 4000, "quantity": 8, "purchasePrice": 2600, "sellingPrice": 3050 },
+  { "brand": "Mobil", "name": "Super 1000 20W-50", "volumeMl": 1000, "quantity": 30, "purchasePrice": 290, "sellingPrice": 360 },
+  { "brand": "Mobil", "name": "1 FS 0W-40", "volumeMl": 1000, "quantity": 16, "purchasePrice": 950, "sellingPrice": 1100 },
+  { "brand": "Valvoline", "name": "Premium Blue 15W-40", "volumeMl": 1000, "quantity": 20, "purchasePrice": 320, "sellingPrice": 395 },
+  { "brand": "Motul", "name": "300V Power 5W-40", "volumeMl": 2000, "quantity": 6, "purchasePrice": 1350, "sellingPrice": 1600 }
 ]
