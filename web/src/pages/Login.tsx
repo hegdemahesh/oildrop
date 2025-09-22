@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../auth/AuthContext';
 import { Navigate } from 'react-router-dom';
-import Logo from '../assets/HegdesOilDrop.png';
+import Logo from '../assets/oildropMainLogo.png';
 
 const Login: React.FC = () => {
   const { user, signInWithGoogle, error, clearError } = useAuth();
@@ -19,8 +19,8 @@ const Login: React.FC = () => {
         <div className="card shadow-2xl bg-slate-900/70 backdrop-blur border border-slate-700">
           <div className="card-body">
             <div className="flex flex-col items-center mb-4">
-              <img src={Logo} alt="OilDrop" className="h-20 w-auto mb-2 drop-shadow" />
-              <h1 className="sr-only">OilDrop Portal</h1>
+              <img src={Logo} alt="OilDrop" className="h-28 w-auto mb-3 drop-shadow-lg select-none" draggable={false} />
+              <h1 className="text-xl font-semibold tracking-wide text-slate-200">OilDrop Portal</h1>
             </div>
             <p className="text-sm text-slate-400 mt-1 mb-4">Sign in to manage inventory & billing</p>
             <button onClick={googleLogin} className="btn btn-primary w-full gap-2 font-semibold">
