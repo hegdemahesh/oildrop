@@ -1,22 +1,38 @@
 import React from 'react';
 import Nav from '../components/Nav';
 
-const Card: React.FC<{ title: string; value: string | number }> = ({ title, value }) => (
-  <div style={{ background: '#fff', padding: '1rem 1.2rem', borderRadius: 12, boxShadow: '0 2px 4px rgba(0,0,0,0.05)', minWidth: 180 }}>
-    <div style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: 0.5, color: '#6b7280', fontWeight: 600 }}>{title}</div>
-    <div style={{ fontSize: 26, fontWeight: 700, marginTop: 4 }}>{value}</div>
+const Stat: React.FC<{ label: string; value: string | number; accent?: string }> = ({ label, value, accent }) => (
+  <div className="p-4 rounded-xl bg-slate-800/60 border border-slate-700 flex flex-col gap-1 min-w-[180px]">
+    <span className="text-[10px] tracking-wide uppercase text-slate-400 font-semibold">{label}</span>
+    <span className={`text-2xl font-bold ${accent || 'text-slate-200'}`}>{value}</span>
   </div>
 );
 
 const Dashboard: React.FC = () => {
   return (
-    <div style={{ minHeight: '100vh', background: '#f3f4f6' }}>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-100">
       <Nav />
-      <main style={{ padding: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-        <Card title="Inventory Items" value="--" />
-        <Card title="Customers" value="--" />
-        <Card title="Low Stock" value="--" />
-        <Card title="Invoices (Today)" value="--" />
+      <main className="max-w-7xl mx-auto px-4 py-8 flex flex-col gap-8">
+        <div>
+          <h2 className="text-xl font-semibold text-slate-200">Overview</h2>
+          <p className="text-sm text-slate-500 mt-1">Realtime operational snapshot</p>
+        </div>
+        <div className="flex flex-wrap gap-4">
+          <Stat label="Inventory Items" value="--" accent="text-sky-400" />
+          <Stat label="Customers" value="--" accent="text-indigo-400" />
+          <Stat label="Low Stock" value="--" accent="text-amber-400" />
+          <Stat label="Invoices (Today)" value="--" accent="text-emerald-400" />
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          <section className="bg-slate-800/50 rounded-xl border border-slate-700 p-5 flex flex-col gap-4 min-h-[240px]">
+            <h3 className="text-sm font-semibold tracking-wide text-slate-300">Recent Invoices</h3>
+            <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">No invoices yet</div>
+          </section>
+          <section className="bg-slate-800/50 rounded-xl border border-slate-700 p-5 flex flex-col gap-4 min-h-[240px]">
+            <h3 className="text-sm font-semibold tracking-wide text-slate-300">Low Stock Alerts</h3>
+            <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">All good • No low stock items</div>
+          </section>
+        </div>
       </main>
     </div>
   );
