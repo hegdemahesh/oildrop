@@ -19,8 +19,8 @@ const Login: React.FC = () => {
         <div className="card shadow-2xl bg-slate-900/70 backdrop-blur border border-slate-700">
           <div className="card-body">
             <div className="flex flex-col items-center mb-4">
-              <img src={Logo} alt="OilDrop" className="h-20 w-auto mb-3 drop-shadow" />
-              <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">OilDrop Portal</h1>
+              <img src={Logo} alt="OilDrop" className="h-20 w-auto mb-2 drop-shadow" />
+              <h1 className="sr-only">OilDrop Portal</h1>
             </div>
             <p className="text-sm text-slate-400 mt-1 mb-4">Sign in to manage inventory & billing</p>
             <button onClick={googleLogin} className="btn btn-primary w-full gap-2 font-semibold">

@@ -11,7 +11,7 @@ const Nav: React.FC = () => {
       <div className="max-w-7xl mx-auto flex items-center gap-4 px-4 py-2">
         <div className="flex items-center gap-2">
           <img src={Logo} alt="OilDrop" className="h-9 w-auto drop-shadow-md" />
-          <div className="font-bold text-lg tracking-wide bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent hidden sm:block">OilDrop</div>
+          <span className="sr-only">OilDrop</span>
         </div>
         <nav className="flex gap-1">
           <NavLink to="/" end className={({isActive})=> `${baseLink} ${isActive ? 'bg-slate-800 text-sky-300' : 'text-slate-300 hover:bg-slate-800/60 hover:text-sky-200'}`}>Dashboard</NavLink>
