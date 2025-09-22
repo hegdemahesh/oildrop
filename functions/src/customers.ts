@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
-interface CustomerInput { name: string; phone?: string; }
+interface CustomerInput { name: string; phone?: string; gstNumber?: string; email?: string; address?: string; balance?: number; }
 
 function validateCustomer(data: any): asserts data is CustomerInput {
   const errors: string[] = [];
@@ -11,6 +11,10 @@ function validateCustomer(data: any): asserts data is CustomerInput {
     if (typeof data.phone !== 'string') errors.push('phone must be string');
     else if (!/^\+?[0-9\- ]{6,20}$/.test(data.phone)) errors.push('phone invalid');
   }
+  if (data.gstNumber != null && typeof data.gstNumber !== 'string') errors.push('gstNumber must be string');
+  if (data.email != null && typeof data.email !== 'string') errors.push('email must be string');
+  if (data.address != null && typeof data.address !== 'string') errors.push('address must be string');
+  if (data.balance != null && (typeof data.balance !== 'number' || isNaN(data.balance))) errors.push('balance must be number');
   if (errors.length) throw new functions.https.HttpsError('invalid-argument', errors.join('; '));
 }
 
@@ -23,6 +27,10 @@ export const addCustomer = functions.region('us-central1').https.onCall(async (d
     const doc = await db.collection('customers').add({
       name: data.name.trim(),
       phone: data.phone?.trim() || null,
+      gstNumber: data.gstNumber?.trim() || null,
+      email: data.email?.trim() || null,
+      address: data.address?.trim() || null,
+      balance: typeof data.balance === 'number' ? data.balance : 0,
       createdAt: now,
       updatedAt: now
     });
