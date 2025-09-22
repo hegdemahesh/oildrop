@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import { onInvoiceCreate } from './invoice';
 import { gstSummary } from './gst';
 import { addInventoryItem, bulkImportInventory, updateInventoryItem, deleteInventoryItem, adjustInventoryQuantity } from './inventory';
-import { addCustomer } from './customers';
+import { addCustomer, updateCustomer, deleteCustomer } from './customers';
 import { addSale, recordPayment } from './sales';
 
 admin.initializeApp();
@@ -18,5 +18,5 @@ export const ping = functions.region('us-central1').https.onRequest((req: functi
   res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
-export { addInventoryItem, bulkImportInventory, updateInventoryItem, deleteInventoryItem, adjustInventoryQuantity, addCustomer, addSale, recordPayment };
+export { addInventoryItem, bulkImportInventory, updateInventoryItem, deleteInventoryItem, adjustInventoryQuantity, addCustomer, updateCustomer, deleteCustomer, addSale, recordPayment };
 

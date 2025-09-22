@@ -15,6 +15,7 @@ service cloud.firestore {
     }
     match /customers/{id} {
       // Demo relaxation: allow all signed-in users to read customers
+      // Fields include: name, phone, altPhone, gstNumber, email, address, balance, createdAt, updatedAt
       allow read: if signedIn();
       allow create, update: if isAdminOrOwner();
       allow delete: if isOwner();
