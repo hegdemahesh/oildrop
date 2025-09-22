@@ -2,6 +2,7 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 
 const required = [
   'VITE_FIREBASE_API_KEY',
@@ -37,6 +38,7 @@ if (!getApps().length && firebaseConfig.apiKey) {
 
 export const auth = getAuth();
 export const db = getFirestore();
+export const functions = getFunctions();
 
 // Connect emulators in development (when running locally without production host)
 if (import.meta.env.MODE === 'development') {
@@ -45,6 +47,9 @@ if (import.meta.env.MODE === 'development') {
   } catch {}
   try {
     connectFirestoreEmulator(db, 'localhost', 8080);
+  } catch {}
+  try {
+    connectFunctionsEmulator(functions, 'localhost', 5001);
   } catch {}
 }
 
