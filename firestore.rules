@@ -14,7 +14,9 @@ service cloud.firestore {
       allow create, update, delete: if isAdminOrOwner();
     }
     match /customers/{id} {
-      allow read, create, update: if isAdminOrOwner();
+      // Demo relaxation: allow all signed-in users to read customers
+      allow read: if signedIn();
+      allow create, update: if isAdminOrOwner();
       allow delete: if isOwner();
     }
     match /invoices/{id} {
