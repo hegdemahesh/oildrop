@@ -1,61 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Nav from '../components/Nav';
+import { collection, onSnapshot, orderBy, query, limit } from 'firebase/firestore';
+import { db } from '../firebase';
+import SaleModal from '../components/SaleModal';
 
-interface Line { id: string; name: string; qty: number; price: number; }
+interface Sale { id: string; customerId: string; subtotal: number; tax: number; total: number; createdAt?: any; }
+interface Customer { id: string; name: string; balance?: number; }
 
 const Sales: React.FC = () => {
-  const [lines, setLines] = useState<Line[]>([]);
-  const [name, setName] = useState('');
-  const [qty, setQty] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
+  const [sales, setSales] = useState<Sale[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const addLine = () => {
-    if (!name) return;
-    setLines(l => [...l, { id: Math.random().toString(36).slice(2), name, qty, price }]);
-    setName(''); setQty(1); setPrice(0);
-  };
+  useEffect(()=>{
+    const cq = query(collection(db, 'customers'), orderBy('name'));
+    return onSnapshot(cq, snap => {
+      const list: Customer[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) })); setCustomers(list);
+    });
+  },[]);
 
-  const subtotal = lines.reduce((s, l) => s + l.qty * l.price, 0);
-  const tax = +(subtotal * 0.18).toFixed(2);
-  const total = +(subtotal + tax).toFixed(2);
+  useEffect(()=>{
+    const qSales = query(collection(db, 'sales'), orderBy('createdAt','desc'), limit(50));
+    return onSnapshot(qSales, snap => {
+      const list: Sale[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) })); setSales(list); setLoading(false);
+    });
+  },[]);
+
+  const customerName = (id: string) => customers.find(c=>c.id===id)?.name || '—';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f3f4f6' }}>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-100">
       <Nav />
-      <main style={{ padding: '1.5rem', maxWidth: 900, margin: '0 auto' }}>
-        <h2>Sales Draft</h2>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-          <input placeholder='Item' value={name} onChange={e => setName(e.target.value)} />
-          <input placeholder='Qty' type='number' value={qty} onChange={e => setQty(parseFloat(e.target.value))} style={{ width: 80 }} />
-            <input placeholder='Price' type='number' value={price} onChange={e => setPrice(parseFloat(e.target.value))} style={{ width: 100 }} />
-          <button onClick={addLine}>Add</button>
+      <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-6">
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl font-semibold text-slate-200">Sales</h2>
+            <p className="text-sm text-slate-500">Recent sales activity</p>
+          </div>
+          <button className="btn btn-sm btn-primary ml-auto" onClick={()=>setShowModal(true)}>New Sale</button>
         </div>
-        <table style={{ width: '100%', background: '#fff', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ textAlign: 'left', background: '#e5e7eb' }}>
-              <th style={{ padding: 8 }}>Item</th>
-              <th style={{ padding: 8 }}>Qty</th>
-              <th style={{ padding: 8 }}>Price</th>
-              <th style={{ padding: 8 }}>Line Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lines.map(l => (
-              <tr key={l.id} style={{ borderTop: '1px solid #f1f5f9' }}>
-                <td style={{ padding: 8 }}>{l.name}</td>
-                <td style={{ padding: 8 }}>{l.qty}</td>
-                <td style={{ padding: 8 }}>{l.price}</td>
-                <td style={{ padding: 8 }}>{(l.qty * l.price).toFixed(2)}</td>
+        <div className="rounded-xl border border-slate-800 overflow-hidden">
+          <table className="table table-zebra-zebra table-sm">
+            <thead>
+              <tr className="bg-slate-800/60 text-slate-400">
+                <th className="w-40">Date</th>
+                <th>Customer</th>
+                <th className="text-right">Subtotal</th>
+                <th className="text-right">Tax</th>
+                <th className="text-right">Total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <div style={{ marginTop: 24, display: 'flex', gap: 24 }}>
-          <div><strong>Subtotal:</strong> {subtotal.toFixed(2)}</div>
-          <div><strong>GST (18%):</strong> {tax.toFixed(2)}</div>
-          <div><strong>Total:</strong> {total.toFixed(2)}</div>
+            </thead>
+            <tbody>
+              {sales.map(s => {
+                const created = s.createdAt?.toDate ? s.createdAt.toDate() : null;
+                return (
+                  <tr key={s.id} className="hover:bg-slate-800/40">
+                    <td className="text-xs text-slate-400">{created ? created.toLocaleString() : '—'}</td>
+                    <td className="text-slate-300">{customerName(s.customerId)}</td>
+                    <td className="text-right font-mono text-slate-300 text-xs">₹{s.subtotal?.toFixed(2)}</td>
+                    <td className="text-right font-mono text-slate-300 text-xs">₹{s.tax?.toFixed(2)}</td>
+                    <td className="text-right font-mono text-slate-200">₹{s.total?.toFixed(2)}</td>
+                  </tr>
+                );
+              })}
+              {!loading && !sales.length && (
+                <tr><td colSpan={5} className="text-center py-10 text-slate-600 text-sm">No sales yet</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </main>
+      <SaleModal open={showModal} onClose={()=>setShowModal(false)} customers={customers} />
     </div>
   );
 };
