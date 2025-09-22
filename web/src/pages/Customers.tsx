@@ -6,7 +6,7 @@ import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../firebase';
 import SaleModal from '../components/SaleModal';
 
-interface Customer { id: string; name: string; phone?: string | null; altPhone?: string | null; gstNumber?: string|null; email?: string|null; address?: string|null; balance?: number; createdAt?: any; updatedAt?: any; }
+interface Customer { id: string; name: string; phone?: string | null; altPhone?: string | null; gstNumber?: string|null; email?: string|null; address?: string|null; balance?: number; totalPaid?: number; createdAt?: any; updatedAt?: any; }
 
 const Customers: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -249,6 +249,9 @@ const Customers: React.FC = () => {
                         <span className="font-mono">{c.phone || '—'}</span>
                         {c.altPhone && <span className="font-mono text-slate-500">/ {c.altPhone}</span>}
                       </div>
+                      { (c.totalPaid ?? 0) > 0 && (
+                        <div className="text-[10px] text-emerald-400">Paid: ₹{(c.totalPaid||0).toFixed(2)}</div>
+                      )}
                       {c.gstNumber && <div>GST: <span className="font-mono text-slate-300">{c.gstNumber}</span></div>}
                       {c.email && <div>Email: <span className="text-slate-300">{c.email}</span></div>}
                       {c.address && <div className="line-clamp-2" title={c.address}>{c.address}</div>}

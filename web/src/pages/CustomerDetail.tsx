@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Nav from '../components/Nav';
-import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { db, functions } from '../firebase';
 import { httpsCallable } from 'firebase/functions';
 import { useToast } from '../components/Toast';
@@ -20,6 +20,7 @@ const CustomerDetail: React.FC = () => {
   const [showLinesFor, setShowLinesFor] = useState<string|null>(null);
   const [payAmount, setPayAmount] = useState('');
   const [payMethod, setPayMethod] = useState('cash');
+  const [payNote, setPayNote] = useState('');
   const [paySubmitting, setPaySubmitting] = useState(false);
   const [editSaleId, setEditSaleId] = useState<string|null>(null);
   const [editLines, setEditLines] = useState<{ idx: number; quantity: number; price: number; }[]>([]);
@@ -34,15 +35,15 @@ const CustomerDetail: React.FC = () => {
     });
   },[id]);
 
-  // Sales subscription
+  // Sales subscription filtered (needs index customerId+createdAt)
   useEffect(()=>{
     if (!id) return;
-    const qSales = query(collection(db, 'sales'), orderBy('createdAt','desc'));
+    const qSales = query(collection(db, 'sales'), where('customerId','==', id), orderBy('createdAt','desc'));
     return onSnapshot(qSales, snap => {
       const list: Sale[] = [];
       snap.forEach(d => {
         const data = d.data() as any;
-        if (data.customerId === id) list.push({ id: d.id, ...data });
+        if (data.status !== 'deleted') list.push({ id: d.id, ...data });
       });
       setSales(list); setLoading(false);
     });
@@ -69,8 +70,9 @@ const CustomerDetail: React.FC = () => {
     setPaySubmitting(true);
     try {
       const fn = httpsCallable(functions, 'recordPayment');
-      await fn({ customerId: id, amount: amt, method: payMethod });
+      await fn({ customerId: id, amount: amt, method: payMethod, note: payNote.trim() || undefined });
       setPayAmount('');
+      setPayNote('');
       push({ type:'success', message:'Payment recorded'});
     } catch (e:any) { push({ type:'error', message: e.message || 'Failed'}); }
     finally { setPaySubmitting(false); }
@@ -86,24 +88,29 @@ const CustomerDetail: React.FC = () => {
   };
   const saveSaleEdits = async () => {
     if (!editSaleId) return;
-    // Demo-only: directly update sale document lines (no recalculation of tax; keep simple)
     const sale = sales.find(s=>s.id===editSaleId);
     if (!sale) return;
     setEditSubmitting(true);
     try {
       const updatedLines = sale.lines.map((l,i)=>{
         const mod = editLines.find(el=>el.idx===i);
-        return mod ? { ...l, quantity: mod.quantity, price: mod.price } : l;
+        return mod ? { itemId: l.itemId, quantity: mod.quantity, price: mod.price } : l;
       });
-      // recompute subtotal & total (keeping tax at 18%)
-      const subtotal = updatedLines.reduce((s,l)=> s + l.quantity*l.price,0);
-      const tax = +(subtotal*0.18).toFixed(2);
-      const total = +(subtotal+tax).toFixed(2);
-      await import('firebase/firestore').then(({ updateDoc, doc }) => updateDoc(doc(db,'sales',editSaleId), { lines: updatedLines, subtotal, tax, total, updatedAt: new Date() }));
+      const fn = httpsCallable(functions, 'updateSale');
+      await fn({ id: editSaleId, lines: updatedLines });
       push({ type:'success', message:'Sale updated'});
       setEditSaleId(null); setEditLines([]);
     } catch (e:any) { push({ type:'error', message: e.message || 'Update failed'}); }
     finally { setEditSubmitting(false); }
+  };
+
+  const deleteSale = async (saleId: string) => {
+    if (!confirm('Delete this sale? Inventory and balance will be adjusted.')) return;
+    try {
+      const fn = httpsCallable(functions, 'deleteSale');
+      await fn({ id: saleId });
+      push({ type:'success', message:'Sale deleted'});
+    } catch (e:any) { push({ type:'error', message: e.message || 'Delete failed'}); }
   };
 
   return (
@@ -140,6 +147,7 @@ const CustomerDetail: React.FC = () => {
           <div className="flex flex-col gap-3 bg-slate-800/40 border border-slate-700 rounded-xl p-4 w-80 h-fit">
             <h3 className="text-sm font-semibold text-slate-300">Record Payment</h3>
             <input type="number" className="input input-sm bg-slate-900" placeholder="Amount" value={payAmount} onChange={e=>setPayAmount(e.target.value)} />
+            <input type="text" className="input input-sm bg-slate-900" placeholder="Note (optional)" value={payNote} onChange={e=>setPayNote(e.target.value)} />
             <select className="select select-sm bg-slate-900" value={payMethod} onChange={e=>setPayMethod(e.target.value)}>
               <option value="cash">Cash</option>
               <option value="upi">UPI</option>
@@ -159,7 +167,7 @@ const CustomerDetail: React.FC = () => {
                   <th className="w-40">Date</th>
                   <th>Total</th>
                   <th>Lines</th>
-                  <th className="w-32" />
+                  <th className="w-40" />
                 </tr>
               </thead>
               <tbody>
@@ -198,14 +206,17 @@ const CustomerDetail: React.FC = () => {
                           </div>
                         )}
                       </td>
-                      <td className="text-right">
+                      <td className="text-right space-x-1">
                         {isEditing ? (
                           <div className="flex flex-col gap-1 items-end">
                             <button className="btn btn-ghost btn-2xs" disabled={editSubmitting} onClick={saveSaleEdits}>{editSubmitting? 'Saving...' : 'Save'}</button>
                             <button className="btn btn-ghost btn-2xs" onClick={cancelEditSale}>Cancel</button>
                           </div>
                         ) : (
-                          <button className="btn btn-ghost btn-2xs" onClick={()=>startEditSale(s)}>Edit</button>
+                          <>
+                            <button className="btn btn-ghost btn-2xs" onClick={()=>startEditSale(s)}>Edit</button>
+                            <button className="btn btn-ghost btn-2xs text-rose-400" onClick={()=>deleteSale(s.id)}>Del</button>
+                          </>
                         )}
                       </td>
                     </tr>
@@ -228,6 +239,7 @@ const CustomerDetail: React.FC = () => {
                   <th className="w-40">Date</th>
                   <th>Amount</th>
                   <th>Method</th>
+                  <th>Note</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,12 +249,18 @@ const CustomerDetail: React.FC = () => {
                     <tr key={p.id}>
                       <td className="text-xs text-slate-400">{created ? created.toLocaleString() : '—'}</td>
                       <td className="text-xs font-mono text-emerald-300">₹{p.amount.toFixed(2)}</td>
-                      <td className="text-xs text-slate-300">{p.method || 'cash'}</td>
+                      <td className="text-xs text-slate-300">
+                        {p.method === 'cash' && '💵'}
+                        {p.method === 'upi' && '📱'}
+                        {p.method === 'card' && '💳'}
+                        {p.method === 'bank' && '🏦'} {p.method || 'cash'}
+                      </td>
+                      <td className="text-[10px] text-slate-500 max-w-xs truncate" title={p.note || ''}>{p.note || '—'}</td>
                     </tr>
                   );
                 })}
                 {!payments.length && (
-                  <tr><td colSpan={3} className="text-center py-8 text-slate-600 text-sm">No payments</td></tr>
+                  <tr><td colSpan={4} className="text-center py-8 text-slate-600 text-sm">No payments</td></tr>
                 )}
               </tbody>
             </table>

@@ -4,7 +4,7 @@ import { collection, onSnapshot, orderBy, query, limit } from 'firebase/firestor
 import { db } from '../firebase';
 import SaleModal from '../components/SaleModal';
 
-interface Sale { id: string; customerId: string; subtotal: number; tax: number; total: number; createdAt?: any; }
+interface Sale { id: string; customerId: string; subtotal: number; tax: number; total: number; status?: string; createdAt?: any; }
 interface Customer { id: string; name: string; balance?: number; }
 
 const Sales: React.FC = () => {
@@ -23,7 +23,11 @@ const Sales: React.FC = () => {
   useEffect(()=>{
     const qSales = query(collection(db, 'sales'), orderBy('createdAt','desc'), limit(50));
     return onSnapshot(qSales, snap => {
-      const list: Sale[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) })); setSales(list); setLoading(false);
+      const list: Sale[] = []; snap.forEach(d=> {
+        const data = d.data() as any;
+        list.push({ id: d.id, ...data });
+      });
+      setSales(list); setLoading(false);
     });
   },[]);
 
@@ -52,7 +56,7 @@ const Sales: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {sales.map(s => {
+              {sales.filter(s=> s.status !== 'deleted').map(s => {
                 const created = s.createdAt?.toDate ? s.createdAt.toDate() : null;
                 return (
                   <tr key={s.id} className="hover:bg-slate-800/40">
@@ -60,7 +64,7 @@ const Sales: React.FC = () => {
                     <td className="text-slate-300">{customerName(s.customerId)}</td>
                     <td className="text-right font-mono text-slate-300 text-xs">₹{s.subtotal?.toFixed(2)}</td>
                     <td className="text-right font-mono text-slate-300 text-xs">₹{s.tax?.toFixed(2)}</td>
-                    <td className="text-right font-mono text-slate-200">₹{s.total?.toFixed(2)}</td>
+                    <td className="text-right font-mono text-slate-200 flex items-center justify-end gap-2">₹{s.total?.toFixed(2)} {s.status==='deleted' && <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300">Deleted</span>}</td>
                   </tr>
                 );
               })}
