@@ -13,6 +13,9 @@ const Sales: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [snapshotError, setSnapshotError] = useState<string | null>(null);
+  const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
+  const [docCount, setDocCount] = useState<number>(0);
 
   useEffect(()=>{
     const cq = query(collection(db, 'customers'), orderBy('name'));
@@ -24,19 +27,49 @@ const Sales: React.FC = () => {
   },[]);
 
   useEffect(()=>{
-    // Broad subscription to all sales; will sort client-side
     const colRef = collection(db, 'sales');
-    return onSnapshot(colRef, snap => {
-      const list: Sale[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) }));
-      // sort descending by createdAt if present
+    const unsub = onSnapshot(colRef,
+      snap => {
+        const list: Sale[] = [];
+        snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) }));
+        setDocCount(snap.size);
+        list.sort((a,b)=>{
+          const ad = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
+          const bd = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+          return bd - ad;
+        });
+        setSales(list);
+        setSnapshotError(null);
+        setLastUpdate(new Date());
+        setLoading(false);
+      },
+      err => {
+        console.error('[sales snapshot] error', err);
+        const msg = (err && (err as any).message) ? (err as any).message : JSON.stringify(err);
+        setSnapshotError(msg);
+        setLoading(false);
+      }
+    );
+    return () => unsub();
+  },[]);
+
+  const manualRefresh = () => {
+    // one-time fetch via snapshot listener pattern (attach, get first event, detach)
+    const colRef = collection(db, 'sales');
+    const tempUnsub = onSnapshot(colRef, snap => {
+      const list: Sale[] = [];
+      snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) }));
       list.sort((a,b)=>{
         const ad = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
         const bd = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
         return bd - ad;
       });
-      setSales(list); setLoading(false);
-    });
-  },[]);
+      setSales(list);
+      setDocCount(snap.size);
+      setLastUpdate(new Date());
+      tempUnsub();
+  }, err => { const msg = (err && (err as any).message) ? (err as any).message : JSON.stringify(err); setSnapshotError(msg); tempUnsub(); });
+  };
 
   const customerName = (id: string) => customers.find(c=>c.id===id)?.name || '—';
 
@@ -79,10 +112,17 @@ const Sales: React.FC = () => {
           </div>
           <div className="ml-auto flex gap-2 items-center">
             <input type="text" placeholder="Search customer..." className="input input-sm bg-slate-900 w-48" value={search} onChange={e=>setSearch(e.target.value)} />
+            <button onClick={manualRefresh} className="btn btn-sm">Refresh</button>
             <button onClick={exportJson} className="btn btn-sm btn-outline">Export JSON</button>
             <button onClick={exportCsv} className="btn btn-sm btn-outline">Export CSV</button>
             <button className="btn btn-sm btn-primary" onClick={()=>setShowModal(true)}>New Sale</button>
           </div>
+        </div>
+        <div className="text-xs text-slate-500 flex flex-wrap gap-4">
+          <span>Docs: {docCount}</span>
+          <span>Showing: {filtered.length}</span>
+          {lastUpdate && <span>Last update: {lastUpdate.toLocaleTimeString()}</span>}
+          {snapshotError && <span className="text-rose-400">Error: {snapshotError}</span>}
         </div>
         <div className="rounded-xl border border-slate-800 overflow-hidden">
           <table className="table table-zebra-zebra table-sm">
