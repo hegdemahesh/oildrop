@@ -22,47 +22,59 @@ function validateItem(item: any): asserts item is InventoryInput {
 
 // Explicitly pin region to avoid accidental multi-region mismatch (default is us-central1 but this is clearer)
 export const addInventoryItem = functions.region('us-central1').https.onCall(async (data, context) => {
-  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
-  validateItem(data);
-  const db = admin.firestore();
-  const now = admin.firestore.FieldValue.serverTimestamp();
-  const doc = await db.collection(COLLECTION).add({
-    brand: data.brand.trim(),
-    name: data.name.trim(),
-    volumeMl: data.volumeMl,
-    quantity: data.quantity,
-    createdAt: now,
-    updatedAt: now
-  });
-  return { id: doc.id };
+  try {
+    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
+    validateItem(data);
+    const db = admin.firestore();
+    const now = admin.firestore.FieldValue.serverTimestamp();
+    const doc = await db.collection(COLLECTION).add({
+      brand: data.brand.trim(),
+      name: data.name.trim(),
+      volumeMl: data.volumeMl,
+      quantity: data.quantity,
+      createdAt: now,
+      updatedAt: now
+    });
+    return { id: doc.id };
+  } catch (e: any) {
+    console.error('[addInventoryItem] error', e);
+    if (e instanceof functions.https.HttpsError) throw e;
+    throw new functions.https.HttpsError('internal', e.message || 'internal error');
+  }
 });
 
 export const bulkImportInventory = functions.region('us-central1').https.onCall(async (data, context) => {
-  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
-  if (!Array.isArray(data)) throw new functions.https.HttpsError('invalid-argument', 'Expected array');
-  const db = admin.firestore();
-  const batch = db.batch();
-  const now = admin.firestore.FieldValue.serverTimestamp();
+  try {
+    if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
+    if (!Array.isArray(data)) throw new functions.https.HttpsError('invalid-argument', 'Expected array');
+    const db = admin.firestore();
+    const batch = db.batch();
+    const now = admin.firestore.FieldValue.serverTimestamp();
 
-  const results: { index: number; status: 'ok' | 'error'; id?: string; error?: string }[] = [];
-  data.forEach((raw, idx) => {
-    try {
-      validateItem(raw);
-      const ref = db.collection(COLLECTION).doc();
-      batch.set(ref, {
-        brand: raw.brand.trim(),
-        name: raw.name.trim(),
-        volumeMl: raw.volumeMl,
-        quantity: raw.quantity,
-        createdAt: now,
-        updatedAt: now
-      });
-      results.push({ index: idx, status: 'ok', id: ref.id });
-    } catch (e: any) {
-      results.push({ index: idx, status: 'error', error: e.message });
-    }
-  });
+    const results: { index: number; status: 'ok' | 'error'; id?: string; error?: string }[] = [];
+    data.forEach((raw, idx) => {
+      try {
+        validateItem(raw);
+        const ref = db.collection(COLLECTION).doc();
+        batch.set(ref, {
+          brand: raw.brand.trim(),
+          name: raw.name.trim(),
+          volumeMl: raw.volumeMl,
+          quantity: raw.quantity,
+          createdAt: now,
+          updatedAt: now
+        });
+        results.push({ index: idx, status: 'ok', id: ref.id });
+      } catch (e: any) {
+        results.push({ index: idx, status: 'error', error: e.message });
+      }
+    });
 
-  await batch.commit();
-  return { count: results.length, results };
+    await batch.commit();
+    return { count: results.length, results };
+  } catch (e: any) {
+    console.error('[bulkImportInventory] error', e);
+    if (e instanceof functions.https.HttpsError) throw e;
+    throw new functions.https.HttpsError('internal', e.message || 'internal error');
+  }
 });
