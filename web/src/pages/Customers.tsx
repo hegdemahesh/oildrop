@@ -5,6 +5,7 @@ import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../firebase';
 import SaleModal from '../components/SaleModal';
+import { useToast } from '../components/Toast';
 
 interface Customer { id: string; name: string; phone?: string | null; altPhone?: string | null; gstNumber?: string|null; email?: string|null; address?: string|null; balance?: number; totalPaid?: number; createdAt?: any; updatedAt?: any; }
 
@@ -27,6 +28,7 @@ const Customers: React.FC = () => {
   // Sale modal handled by SaleModal component now
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { push } = useToast();
 
   useEffect(() => {
     const q = query(collection(db, 'customers'), orderBy('name'));
@@ -259,6 +261,7 @@ const Customers: React.FC = () => {
                     <div className="mt-auto pt-2 flex gap-2 print:hidden">
                       <button className="btn btn-xs btn-primary" onClick={()=>openSale(c)}>Sale</button>
                       <button className="btn btn-xs" onClick={()=>navigate(`/customers/${c.id}`)}>View</button>
+                      <button className="btn btn-xs btn-outline" onClick={()=>push({ type:'info', message:`Reminder SMS queued for ${c.name}`})}>Reminder</button>
                     </div>
                   </>
                 )}

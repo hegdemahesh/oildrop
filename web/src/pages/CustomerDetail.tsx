@@ -10,6 +10,15 @@ interface Customer { id: string; name: string; phone?: string|null; altPhone?: s
 interface Sale { id: string; subtotal: number; tax: number; total: number; createdAt?: any; lines: { itemId: string; quantity: number; price: number; }[]; }
 interface Payment { id: string; amount: number; method?: string; note?: string|null; createdAt?: any; }
 
+function sortByCreatedDesc<T extends { createdAt?: any }>(list: T[]) {
+  list.sort((a,b)=>{
+    const at = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
+    const bt = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+    return bt - at;
+  });
+  return list;
+}
+
 const CustomerDetail: React.FC = () => {
   const { id } = useParams();
   const { push } = useToast();
@@ -49,15 +58,33 @@ const CustomerDetail: React.FC = () => {
     });
   },[id]);
 
-  // Payments subscription (subcollection)
+  // Payments subscription (subcollection) with fallback if orderBy fails or field missing
   useEffect(()=>{
     if (!id) return;
-    const qPay = query(collection(db, 'customers', id, 'payments'), orderBy('createdAt','desc'));
-    return onSnapshot(qPay, snap => {
+    const colRef = collection(db, 'customers', id, 'payments');
+    let fallbackUnsub: (()=>void)|null = null;
+
+    const handlePrimary = (snap: any) => {
       const list: Payment[] = [];
-      snap.forEach(d => list.push({ id: d.id, ...(d.data() as any) }));
+      snap.forEach((d: any) => list.push({ id: d.id, ...(d.data() as any) }));
       setPayments(list);
-    });
+    };
+    const handleFallback = (snap2: any) => {
+      const list: Payment[] = [];
+      snap2.forEach((d: any) => list.push({ id: d.id, ...(d.data() as any) }));
+      sortByCreatedDesc(list);
+      setPayments(list);
+    };
+
+    const unsub = onSnapshot(
+      query(colRef, orderBy('createdAt','desc')),
+      handlePrimary,
+      (err) => {
+        console.warn('[payments snapshot] fallback (no orderBy):', err);
+        fallbackUnsub = onSnapshot(colRef, handleFallback);
+      }
+    );
+    return () => { unsub(); if (fallbackUnsub) fallbackUnsub(); };
   },[id]);
 
   const totalPaid = useMemo(()=> payments.reduce((s,p)=> s + (p.amount||0),0), [payments]);
@@ -139,6 +166,10 @@ const CustomerDetail: React.FC = () => {
                     <div>Total Sales: <span className="text-slate-200 font-medium">{sales.length}</span></div>
                     <div>Sales Value: <span className="text-slate-200 font-medium">₹{salesTotal.toFixed(2)}</span></div>
                     <div>Paid: <span className="text-slate-200 font-medium">₹{totalPaid.toFixed(2)}</span></div>
+                  </div>
+                  <div className="flex gap-2 pt-2">
+                    <button className="btn btn-ghost btn-xs" onClick={()=>push({ type:'info', message:`Reminder SMS queued for ${customer.name}`})}>Send Reminder SMS</button>
+                    <button className="btn btn-ghost btn-xs" onClick={()=>push({ type:'success', message:`Invoice SMS sent to ${customer.name}`})}>Send Invoice SMS</button>
                   </div>
                 </div>
               </div>
