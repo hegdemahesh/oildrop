@@ -20,7 +20,6 @@ const Login: React.FC = () => {
           <div className="card-body">
             <div className="flex flex-col items-center mb-4">
               <img src={Logo} alt="OilDrop" className="h-28 w-auto mb-3 drop-shadow-lg select-none" draggable={false} />
-              <h1 className="text-xl font-semibold tracking-wide text-slate-200">OilDrop Portal</h1>
             </div>
             <p className="text-sm text-slate-400 mt-1 mb-4">Sign in to manage inventory & billing</p>
             <button onClick={googleLogin} className="btn btn-primary w-full gap-2 font-semibold">
