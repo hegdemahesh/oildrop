@@ -6,5 +6,10 @@
   { "brand": "Mobil", "name": "Super 1000 20W-50", "volumeMl": 1000, "quantity": 30, "purchasePrice": 290, "sellingPrice": 360 },
   { "brand": "Mobil", "name": "1 FS 0W-40", "volumeMl": 1000, "quantity": 16, "purchasePrice": 950, "sellingPrice": 1100 },
   { "brand": "Valvoline", "name": "Premium Blue 15W-40", "volumeMl": 1000, "quantity": 20, "purchasePrice": 320, "sellingPrice": 395 },
-  { "brand": "Motul", "name": "300V Power 5W-40", "volumeMl": 2000, "quantity": 6, "purchasePrice": 1350, "sellingPrice": 1600 }
+  { "brand": "Motul", "name": "300V Power 5W-40", "volumeMl": 2000, "quantity": 6, "purchasePrice": 1350, "sellingPrice": 1600 },
+  { "brand": "Gulf", "name": "Super Duty 20W-40", "volumeMl": 1000, "quantity": 18, "purchasePrice": 250, "sellingPrice": 315 },
+  { "brand": "Total", "name": "Quartz 7000 10W-40", "volumeMl": 4000, "quantity": 9, "purchasePrice": 1450, "sellingPrice": 1725 },
+  { "brand": "Liqui Moly", "name": "Molygen New Gen 5W-40", "volumeMl": 4000, "quantity": 5, "purchasePrice": 2700, "sellingPrice": 3180 },
+  { "brand": "Petronas", "name": "Syntium 800 10W-40", "volumeMl": 4000, "quantity": 7, "purchasePrice": 1600, "sellingPrice": 1890 },
+  { "brand": "Amsoil", "name": "Signature Series 5W-30", "volumeMl": 1000, "quantity": 12, "purchasePrice": 1050, "sellingPrice": 1250 }
 ]
