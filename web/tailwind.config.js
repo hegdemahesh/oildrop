@@ -1,4 +1,6 @@
-/**** Tailwind + DaisyUI config ****/ 
+/*** Tailwind + DaisyUI config (ESM) ***/
+import daisyui from 'daisyui';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -11,7 +13,7 @@ export default {
       container: { center: true, padding: '1rem' }
     }
   },
-  plugins: [require('daisyui')],
+  plugins: [daisyui],
   daisyui: {
     themes: [
       'dark',
