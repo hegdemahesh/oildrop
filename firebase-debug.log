@@ -1,0 +1,238 @@
+[debug] [2025-09-22T06:12:44.993Z] ----------------------------------------------------------------------
+[debug] [2025-09-22T06:12:44.996Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\maheshchandra\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2025-09-22T06:12:44.996Z] CLI Version:   14.11.1
+[debug] [2025-09-22T06:12:44.996Z] Platform:      win32
+[debug] [2025-09-22T06:12:44.996Z] Node Version:  v23.3.0
+[debug] [2025-09-22T06:12:44.996Z] Time:          Mon Sep 22 2025 11:42:44 GMT+0530 (India Standard Time)
+[debug] [2025-09-22T06:12:44.996Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-09-22T06:12:45.218Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-09-22T06:12:45.219Z] > authorizing via signed-in user (hid.mahesh@gmail.com)
+[debug] [2025-09-22T06:12:45.286Z] openjdk version "17.0.15" 2025-04-15
+
+[debug] [2025-09-22T06:12:45.287Z] OpenJDK Runtime Environment Temurin-17.0.15+6 (build 17.0.15+6)
+OpenJDK 64-Bit Server VM Temurin-17.0.15+6 (build 17.0.15+6, mixed mode, sharing)
+
+[debug] [2025-09-22T06:12:45.306Z] Parsed Java major version: 17
+[info] i  emulators: Starting emulators: auth, functions, firestore, hosting, storage, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, hosting, storage, extensions"}}
+[debug] [2025-09-22T06:12:45.308Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:45.308Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:45.309Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/lubelogix [none]
+[debug] [2025-09-22T06:12:46.657Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/lubelogix 200
+[debug] [2025-09-22T06:12:46.657Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/lubelogix {"projectNumber":"896667470980","projectId":"lubelogix","lifecycleState":"ACTIVE","name":"lubelogix","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2025-09-21T07:43:54.357185Z"}
+[debug] [2025-09-22T06:12:46.671Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.671Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.671Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.671Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.672Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.672Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.672Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-09-22T06:12:46.677Z] [hub] writing locator at C:\Users\MAHESH~1\AppData\Local\Temp\hub-lubelogix.json
+[debug] [2025-09-22T06:12:46.683Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2025-09-22T06:12:46.688Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.689Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.689Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-09-22T06:12:46.689Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, database, pubsub, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, database, pubsub, dataconnect\u001b[22m"}}
+[debug] [2025-09-22T06:12:46.705Z] defaultcredentials: writing to file C:\Users\maheshchandra\AppData\Roaming\firebase\hid_mahesh_gmail.com_application_default_credentials.json
+[debug] [2025-09-22T06:12:46.706Z] Setting GAC to C:\Users\maheshchandra\AppData\Roaming\firebase\hid_mahesh_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\maheshchandra\\AppData\\Roaming\\firebase\\hid_mahesh_gmail.com_application_default_credentials.json"}}
+[debug] [2025-09-22T06:12:46.706Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:46.706Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:46.707Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/adminSdkConfig [none]
+[debug] [2025-09-22T06:12:47.133Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/adminSdkConfig 200
+[debug] [2025-09-22T06:12:47.134Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/adminSdkConfig {"projectId":"lubelogix","storageBucket":"lubelogix.firebasestorage.app"}
+[debug] [2025-09-22T06:12:47.154Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2025-09-22T06:12:47.155Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2025-09-22T06:12:47.155Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\maheshchandra\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","lubelogix","--rules","C:\\Users\\maheshchandra\\Documents\\GitHub\\oildrop\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\maheshchandra\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"lubelogix\",\"--rules\",\"C:\\\\Users\\\\maheshchandra\\\\Documents\\\\GitHub\\\\oildrop\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2025-09-22T06:12:48.213Z] Sep 22, 2025 11:42:48 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:42:48 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\r\nINFO: Started WebSocket server on ws://127.0.0.1:9150\r\n"}}
+[debug] [2025-09-22T06:12:48.256Z] API endpoint: http://127.0.0.1:8080
+ {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://127.0.0.1:8080\n"}}
+[debug] [2025-09-22T06:12:48.256Z] If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080\n\nIf you are running a Firestore in Datastore Mode project, run:\r\n\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\r\nDev App Server is now running.\n\r\n"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2025-09-22T06:12:53.590Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2025-09-22T06:12:54.384Z] Temp file directory for storage emulator: C:\Users\MAHESH~1\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\MAHESH~1\\AppData\\Local\\Temp/firebase/storage/blobs"}}
+[debug] [2025-09-22T06:12:54.388Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:54.388Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:54.388Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/lubelogix/sites 
+[debug] [2025-09-22T06:12:55.510Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/lubelogix/sites 200
+[debug] [2025-09-22T06:12:55.511Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/lubelogix/sites {"sites":[{"name":"projects/lubelogix/sites/lubelogix","defaultUrl":"https://lubelogix.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2025-09-22T06:12:55.511Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:55.511Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:55.511Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/webApps/-/config [none]
+[debug] [2025-09-22T06:12:56.263Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/webApps/-/config 200
+[debug] [2025-09-22T06:12:56.263Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix/webApps/-/config {"projectId":"lubelogix","appId":"1:896667470980:web:e690dca109f92c61bc06d1","storageBucket":"lubelogix.firebasestorage.app","apiKey":"AIzaSyDRZb2uM0LLcOFp4V2AfuGYw2IDvgdjDhc","authDomain":"lubelogix.firebaseapp.com","messagingSenderId":"896667470980","measurementId":"G-MCVFD5WPN4"}
+[debug] [2025-09-22T06:12:56.271Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:56.272Z] Checked if tokens are valid: true, expires at: 1758524932717
+[debug] [2025-09-22T06:12:56.272Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix [none]
+[debug] [2025-09-22T06:12:56.608Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix 200
+[debug] [2025-09-22T06:12:56.608Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/lubelogix {"projectId":"lubelogix","projectNumber":"896667470980","displayName":"lubelogix","name":"projects/lubelogix","resources":{"hostingSite":"lubelogix"},"state":"ACTIVE","etag":"1_9cb50758-4aeb-41a9-a5b4-0a2d04a75c9f"}
+[debug] [2025-09-22T06:12:56.609Z] Specified "public" directory "web/dist" does not exist; Deploy to Hosting site "lubelogix" may fail or be empty.
+[info] i  hosting[lubelogix]: Serving hosting files from: web/dist {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mweb/dist\u001b[22m"}}
+[info] +  hosting[lubelogix]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2025-09-22T06:12:56.636Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "C:\Users\maheshchandra\Documents\GitHub\oildrop\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\maheshchandra\\Documents\\GitHub\\oildrop\\functions\" for Cloud Functions..."}}
+[debug] [2025-09-22T06:12:56.639Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2025-09-22T06:12:57.607Z] > [functions] package.json contents: {
+  "name": "oildrop-functions",
+  "version": "0.1.0",
+  "private": true,
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions,firestore,auth",
+    "deploy": "npm run build && firebase deploy --only functions"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3"
+  }
+}
+[debug] [2025-09-22T06:12:57.608Z] Building nodejs source
+[debug] [2025-09-22T06:12:57.608Z] Failed to find version of module node: reached end of search path C:\Users\maheshchandra\Documents\GitHub\oildrop\functions\node_modules
+[warn] !  functions: Your requested "node" version "20" doesn't match your global version "23". Using node@23 from host. 
+[debug] [2025-09-22T06:12:57.610Z] Could not find functions.yaml. Must use http discovery
+[debug] [2025-09-22T06:12:57.616Z] Found firebase-functions binary at 'C:\Users\maheshchandra\Documents\GitHub\oildrop\node_modules\.bin\firebase-functions'
+[info] Serving at port 8900
+
+[debug] [2025-09-22T06:12:58.795Z] Got response from /__/functions.yaml {"endpoints":{"invoiceCreated":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"eventTrigger":{"eventType":"providers/cloud.firestore/eventTypes/document.create","eventFilters":{"resource":"projects/lubelogix/databases/(default)/documents/invoices/{invoiceId}"},"retry":false},"labels":{},"entryPoint":"invoiceCreated"},"gstSummaryHttp":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"gstSummaryHttp"},"ping":{"platform":"gcfv1","availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"serviceAccountEmail":null,"vpc":null,"httpsTrigger":{},"entryPoint":"ping"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2025-09-22T06:13:02.832Z] defaultcredentials: writing to file C:\Users\maheshchandra\AppData\Roaming\firebase\hid_mahesh_gmail.com_application_default_credentials.json
+[debug] [2025-09-22T06:13:02.832Z] Setting GAC to C:\Users\maheshchandra\AppData\Roaming\firebase\hid_mahesh_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\maheshchandra\\AppData\\Roaming\\firebase\\hid_mahesh_gmail.com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: invoiceCreated, gstSummaryHttp, ping. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: invoiceCreated, gstSummaryHttp, ping."}}
+[debug] [2025-09-22T06:13:02.837Z] addFirestoreTrigger "{\"eventTrigger\":{\"eventType\":\"providers/cloud.firestore/eventTypes/document.create\",\"resource\":\"projects/lubelogix/databases/(default)/documents/invoices/{invoiceId}\",\"service\":\"firestore.googleapis.com\"}}"
+[debug] [2025-09-22T06:13:02.838Z] >>> [apiv2][query] PUT http://127.0.0.1:8080/emulator/v1/projects/lubelogix/triggers/us-central1-invoiceCreated-0 [none]
+[debug] [2025-09-22T06:13:02.838Z] >>> [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/lubelogix/triggers/us-central1-invoiceCreated-0 "{\"eventTrigger\":{\"eventType\":\"providers/cloud.firestore/eventTypes/document.create\",\"resource\":\"projects/lubelogix/databases/(default)/documents/invoices/{invoiceId}\",\"service\":\"firestore.googleapis.com\"}}"
+[debug] [2025-09-22T06:13:02.845Z] Sep 22, 2025 11:43:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:13:03.032Z] Sep 22, 2025 11:43:03 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:03 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:13:03.753Z] <<< [apiv2][status] PUT http://127.0.0.1:8080/emulator/v1/projects/lubelogix/triggers/us-central1-invoiceCreated-0 200
+[debug] [2025-09-22T06:13:03.753Z] <<< [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/lubelogix/triggers/us-central1-invoiceCreated-0 {}
+[info] +  functions[us-central1-invoiceCreated]: firestore function initialized. {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mfirestore\u001b[22m function initialized."}}
+[info] +  functions[us-central1-gstSummaryHttp]: http function initialized (http://127.0.0.1:5001/lubelogix/us-central1/gstSummaryHttp). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/lubelogix/us-central1/gstSummaryHttp)."}}
+[info] +  functions[us-central1-ping]: http function initialized (http://127.0.0.1:5001/lubelogix/us-central1/ping). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/lubelogix/us-central1/ping)."}}
+[debug] [2025-09-22T06:13:03.759Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: connect ECONNREFUSED ::1:40001. If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Hosting        │ 127.0.0.1:5000 │ n/a                              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage    │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2025-09-22T06:13:05.517Z] Sep 22, 2025 11:43:05 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:05 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\r\nINFO: Connected to new websocket client\r\n"}}
+[debug] [2025-09-22T06:13:15.943Z] Sep 22, 2025 11:43:15 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel
+INFO: Connected to new websocket client
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:15 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler initChannel\r\nINFO: Connected to new websocket client\r\n"}}
+[debug] [2025-09-22T06:13:17.808Z] Sep 22, 2025 11:43:17 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed
+INFO: Websocket client disconnected
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:17 AM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketChannelHandler channelClosed\r\nINFO: Websocket client disconnected\r\n"}}
+[debug] [2025-09-22T06:13:47.112Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/lubelogix/trigger_multicast [none]
+[debug] [2025-09-22T06:13:47.112Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/lubelogix/trigger_multicast {"eventId":"a4f84194-dcf5-4433-a0f5-e5a1c173d346","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/lubelogix","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2025-09-22T06:13:47.112Z","data":{"uid":"kCu7X2Vg6pPZ2qTg1QZXVrT6OwXE","email":"mahesh8341@gmail.com","emailVerified":true,"metadata":{"creationTime":"2025-09-22T06:13:47.111Z","lastSignInTime":"2025-09-22T06:13:47.111Z"},"customClaims":{},"providerData":[{"rawId":"1515266768709277173247025219509819322269","providerId":"google.com","email":"mahesh8341@gmail.com","federatedId":"1515266768709277173247025219509819322269"}]}}
+[debug] [2025-09-22T06:13:47.122Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/lubelogix/trigger_multicast 200
+[debug] [2025-09-22T06:13:47.122Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/lubelogix/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2025-09-22T06:13:56.828Z] Sep 22, 2025 11:43:56 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:56 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:13:57.199Z] Sep 22, 2025 11:43:57 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:43:57 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:00.345Z] Sep 22, 2025 11:44:00 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:00 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:01.424Z] Sep 22, 2025 11:44:01 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:01 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:01.747Z] Sep 22, 2025 11:44:01 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:01 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:02.597Z] Sep 22, 2025 11:44:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:02.907Z] Sep 22, 2025 11:44:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:02 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:04.962Z] Sep 22, 2025 11:44:04 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:04 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:05.297Z] Sep 22, 2025 11:44:05 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:05 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:05.904Z] Sep 22, 2025 11:44:05 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:05 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:06.222Z] Sep 22, 2025 11:44:06 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:06 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:06.773Z] Sep 22, 2025 11:44:06 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:06 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:09.212Z] Sep 22, 2025 11:44:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:09.532Z] Sep 22, 2025 11:44:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:09 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:10.313Z] Sep 22, 2025 11:44:10 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:10 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:10.632Z] Sep 22, 2025 11:44:10 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:10 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:19.069Z] Sep 22, 2025 11:44:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:19.398Z] Sep 22, 2025 11:44:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:19 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:20.616Z] Sep 22, 2025 11:44:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:20.937Z] Sep 22, 2025 11:44:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:20 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2025-09-22T06:14:35.276Z] Sep 22, 2025 11:44:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Sep 22, 2025 11:44:35 AM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
