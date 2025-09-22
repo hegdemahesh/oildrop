@@ -88,6 +88,37 @@ const Inventory: React.FC = () => {
     }
   };
 
+  const exportJson = () => {
+    const exported = items.map(({ id, createdAt, ...rest }) => rest); // match import schema (brand,name,volumeMl,quantity)
+    const blob = new Blob([JSON.stringify(exported, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `inventory-${new Date().toISOString().slice(0,10)}.json`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportCsv = () => {
+    if (!items.length) return;
+    const headers = ['brand','name','volumeMl','quantity'];
+    const lines = [headers.join(',')];
+    items.forEach(it => {
+      const row = [it.brand, it.name, it.volumeMl, it.quantity].map(v => {
+        const s = String(v);
+        return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
+      }).join(',');
+      lines.push(row);
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `inventory-${new Date().toISOString().slice(0,10)}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const printPage = () => {
+    window.print();
+  };
+
   const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -108,9 +139,14 @@ const Inventory: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-100">
       <Nav />
       <main className="max-w-6xl mx-auto px-4 py-8 flex flex-col gap-8">
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 print:hidden">
           <h2 className="text-lg font-semibold text-slate-200">Inventory</h2>
           <button onClick={()=>setShowAdd(s=>!s)} className="btn btn-sm btn-primary">{showAdd ? 'Close' : 'Add Inventory'}</button>
+          <div className="flex gap-2">
+            <button onClick={exportJson} className="btn btn-sm btn-outline">Export JSON</button>
+            <button onClick={exportCsv} className="btn btn-sm btn-outline">Export CSV</button>
+            <button onClick={printPage} className="btn btn-sm btn-outline">Print</button>
+          </div>
           <div className="ml-auto flex flex-col items-start bg-slate-800/40 border border-slate-700 p-3 rounded-lg">
             <label htmlFor="importjson" className="text-xs text-slate-400 mb-1">Import JSON</label>
             <input id="importjson" type="file" accept="application/json" onChange={onFile} className="file-input file-input-bordered file-input-xs w-52" />
