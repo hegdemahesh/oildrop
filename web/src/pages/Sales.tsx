@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Nav from '../components/Nav';
-import { collection, onSnapshot, orderBy, query, limit } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import SaleModal from '../components/SaleModal';
 
@@ -12,20 +12,27 @@ const Sales: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(()=>{
     const cq = query(collection(db, 'customers'), orderBy('name'));
-    return onSnapshot(cq, snap => {
-      const list: Customer[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) })); setCustomers(list);
+    return onSnapshot(cq, (snap) => {
+      const list: Customer[] = [];
+      snap.forEach((d) => list.push({ id: d.id, ...(d.data() as any) }));
+      setCustomers(list);
     });
   },[]);
 
   useEffect(()=>{
-    const qSales = query(collection(db, 'sales'), orderBy('createdAt','desc'), limit(50));
-    return onSnapshot(qSales, snap => {
-      const list: Sale[] = []; snap.forEach(d=> {
-        const data = d.data() as any;
-        list.push({ id: d.id, ...data });
+    // Broad subscription to all sales; will sort client-side
+    const colRef = collection(db, 'sales');
+    return onSnapshot(colRef, snap => {
+      const list: Sale[] = []; snap.forEach(d=> list.push({ id: d.id, ...(d.data() as any) }));
+      // sort descending by createdAt if present
+      list.sort((a,b)=>{
+        const ad = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
+        const bd = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+        return bd - ad;
       });
       setSales(list); setLoading(false);
     });
@@ -33,16 +40,49 @@ const Sales: React.FC = () => {
 
   const customerName = (id: string) => customers.find(c=>c.id===id)?.name || '—';
 
+  const filtered = useMemo(()=>{
+    if (!search.trim()) return sales;
+    const s = search.toLowerCase();
+    return sales.filter(sl => customerName(sl.customerId).toLowerCase().includes(s));
+  },[search, sales, customers]);
+
+  const exportJson = () => {
+    const payload = sales.map(s => ({ id: s.id, customerId: s.customerId, customer: customerName(s.customerId), subtotal: s.subtotal, tax: s.tax, total: s.total, status: s.status, createdAt: s.createdAt?.toDate ? s.createdAt.toDate().toISOString() : null }));
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `sales-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url);
+  };
+
+  const exportCsv = () => {
+    if (!sales.length) return;
+    const headers = ['id','customerId','customer','subtotal','tax','total','status','createdAt'];
+    const lines = [headers.join(',')];
+    sales.forEach(s => {
+      const rowVals = [s.id, s.customerId, customerName(s.customerId), s.subtotal?.toFixed(2), s.tax?.toFixed(2), s.total?.toFixed(2), s.status || '', s.createdAt?.toDate ? s.createdAt.toDate().toISOString() : ''];
+      const row = rowVals.map(v=>{
+        const str = String(v ?? '');
+        return /[",\n]/.test(str) ? '"'+str.replace(/"/g,'""')+'"' : str;
+      }).join(',');
+      lines.push(row);
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download=`sales-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-100">
       <Nav />
       <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-6">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <div className="flex flex-col gap-1">
             <h2 className="text-xl font-semibold text-slate-200">Sales</h2>
             <p className="text-sm text-slate-500">Recent sales activity</p>
           </div>
-          <button className="btn btn-sm btn-primary ml-auto" onClick={()=>setShowModal(true)}>New Sale</button>
+          <div className="ml-auto flex gap-2 items-center">
+            <input type="text" placeholder="Search customer..." className="input input-sm bg-slate-900 w-48" value={search} onChange={e=>setSearch(e.target.value)} />
+            <button onClick={exportJson} className="btn btn-sm btn-outline">Export JSON</button>
+            <button onClick={exportCsv} className="btn btn-sm btn-outline">Export CSV</button>
+            <button className="btn btn-sm btn-primary" onClick={()=>setShowModal(true)}>New Sale</button>
+          </div>
         </div>
         <div className="rounded-xl border border-slate-800 overflow-hidden">
           <table className="table table-zebra-zebra table-sm">
@@ -56,7 +96,7 @@ const Sales: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {sales.filter(s=> s.status !== 'deleted').map(s => {
+              {filtered.map(s => {
                 const created = s.createdAt?.toDate ? s.createdAt.toDate() : null;
                 return (
                   <tr key={s.id} className="hover:bg-slate-800/40">
@@ -68,7 +108,7 @@ const Sales: React.FC = () => {
                   </tr>
                 );
               })}
-              {!loading && !sales.length && (
+              {!loading && !filtered.length && (
                 <tr><td colSpan={5} className="text-center py-10 text-slate-600 text-sm">No sales yet</td></tr>
               )}
             </tbody>
