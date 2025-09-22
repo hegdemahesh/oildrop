@@ -10,12 +10,11 @@ const required = [
   'VITE_FIREBASE_STORAGE_BUCKET',
   'VITE_FIREBASE_MESSAGING_SENDER_ID',
   'VITE_FIREBASE_APP_ID'
-];
+]; // measurement id optional
 
 const missing = required.filter(k => !import.meta.env[k as keyof ImportMetaEnv]);
 if (missing.length) {
-  // eslint-disable-next-line no-console
-  console.error('Missing Firebase env variables:', missing.join(', '));
+  console.error('[Firebase] Missing env variables:', missing.join(', '));
 }
 
 const firebaseConfig = {
@@ -28,12 +27,11 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'YOUR_API_KEY_HERE') {
-  // eslint-disable-next-line no-console
-  console.warn('Firebase config appears invalid: apiKey is empty. Check your web/.env file.');
+if (!firebaseConfig.apiKey) {
+  console.warn('[Firebase] apiKey missing – app will not initialize. Check web/.env.');
 }
 
-if (!getApps().length) {
+if (!getApps().length && firebaseConfig.apiKey) {
   initializeApp(firebaseConfig);
 }
 
