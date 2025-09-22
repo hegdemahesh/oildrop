@@ -25,6 +25,20 @@ service cloud.firestore {
       allow create: if isAdminOrOwner();
       allow update, delete: if false; // immutable once written
     }
+    // Sales collection (was missing -> caused 'No matching allow statements')
+    match /sales/{id} {
+      // Allow any signed-in user to read sales
+      allow read: if signedIn();
+      // Restrict modifications to admins/owners
+      allow create, update, delete: if isAdminOrOwner();
+    }
+
+    // Payments subcollection under customers
+    match /customers/{customerId}/payments/{paymentId} {
+      allow read: if signedIn();
+      allow create: if isAdminOrOwner();
+      // No updates/deletes for historical integrity (can adjust if needed)
+    }
     match /roles/{uid} {
       allow read: if isAdminOrOwner();
       allow write: if isOwner();
