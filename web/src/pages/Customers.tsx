@@ -19,6 +19,7 @@ const Customers: React.FC = () => {
   const [editingId, setEditingId] = useState<string|null>(null);
   const [editValues, setEditValues] = useState<Partial<Customer>>({});
   const [showSaleFor, setShowSaleFor] = useState<Customer|null>(null);
+  const [showAdd, setShowAdd] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -154,10 +155,20 @@ const Customers: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 text-slate-100">
       <Nav />
       <main className="max-w-5xl mx-auto px-4 py-8 flex flex-col gap-8">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-xl font-semibold text-slate-200">Customers</h2>
-          <p className="text-sm text-slate-500">Manage customer directory</p>
+        <div className="flex flex-wrap items-center gap-4 print:hidden">
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl font-semibold text-slate-200">Customers</h2>
+            <p className="text-sm text-slate-500">Manage customer directory</p>
+          </div>
+          <button onClick={()=>setShowAdd(s=>!s)} className="btn btn-sm btn-primary">{showAdd? 'Close' : 'Add Customer'}</button>
+          <div className="ml-auto flex gap-2 items-center">
+            <input type="text" placeholder="Search..." className="input input-sm bg-slate-900 w-48" value={search} onChange={e=>setSearch(e.target.value)} />
+            <button onClick={exportJson} className="btn btn-sm btn-outline">Export JSON</button>
+            <button onClick={exportCsv} className="btn btn-sm btn-outline">Export CSV</button>
+            <label className="btn btn-sm btn-outline cursor-pointer">Import JSON<input type="file" accept="application/json" onChange={onImportFile} className="hidden" /></label>
+          </div>
         </div>
+        {showAdd && (
         <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl flex flex-wrap gap-4 items-end">
           <div className="flex flex-col">
             <label htmlFor="cust-name" className="text-xs text-slate-400 mb-1">Name *</label>
@@ -188,13 +199,8 @@ const Customers: React.FC = () => {
               <input id="cust-balance" type="number" className="input input-sm input-bordered bg-slate-900 w-36" value={balance} onChange={e=>setBalance(e.target.value)} />
             </div>
             <button onClick={addCustomer} disabled={submitting} className="btn btn-primary btn-sm mt-5">{submitting ? 'Adding...' : 'Add'}</button>
-            <div className="ml-auto flex gap-2 items-end">
-              <input type="text" placeholder="Search..." className="input input-sm bg-slate-900 w-48" value={search} onChange={e=>setSearch(e.target.value)} />
-              <button onClick={exportJson} className="btn btn-sm btn-outline">Export JSON</button>
-              <button onClick={exportCsv} className="btn btn-sm btn-outline">Export CSV</button>
-              <label className="btn btn-sm btn-outline cursor-pointer">Import JSON<input type="file" accept="application/json" onChange={onImportFile} className="hidden" /></label>
-            </div>
         </div>
+        )}
         {error && <div className="alert alert-error py-2 h-10 min-h-0 text-sm">{error}</div>}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filtered.map(c => {

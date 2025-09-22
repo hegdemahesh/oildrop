@@ -1,0 +1,10 @@
+[
+  { "name": "Ravi Kumar", "phone": "+91 98450 12345", "altPhone": "+91 74115 67890", "gstNumber": "29ABCDE1234F1Z5", "email": "ravi.kumar@example.com", "address": "#12 Residency Road\nBengaluru", "balance": 0 },
+  { "name": "Priya Sharma", "phone": "+91 98201 33445", "gstNumber": "27PQRSZ5678L1Z2", "email": "priya.sharma@example.com", "address": "302, Green Heights\nAndheri West, Mumbai", "balance": 4500 },
+  { "name": "Amit Verma", "phone": "+91 93602 99887", "altPhone": "+91 70195 22311", "email": "amit.verma@example.com", "address": "48, MG Road\nPune", "balance": -750 },
+  { "name": "Sneha Iyer", "phone": "+91 99452 11007", "gstNumber": "33LMNOP3456K2Z7", "email": "sneha.iyer@example.com", "address": "221-B, Anna Nagar\nChennai", "balance": 0 },
+  { "name": "Vikram Singh", "phone": "+91 98111 44556", "gstNumber": "07QRSTU7890J1Z3", "address": "Plot 9, Sector 21\nGurugram", "balance": 12900 },
+  { "name": "Neha Patel", "phone": "+91 99250 66778", "email": "neha.patel@example.com", "address": "Near Law Garden\nAhmedabad", "balance": 0 },
+  { "name": "Arjun Reddy", "phone": "+91 90005 11223", "gstNumber": "36ABCDE9876F1Z4", "address": "Hitech City\nHyderabad", "balance": 3200 },
+  { "name": "Kiran Das", "phone": "+91 98310 55667", "email": "kiran.das@example.com", "address": "Salt Lake Sector V\nKolkata", "balance": -1200 }
+]
