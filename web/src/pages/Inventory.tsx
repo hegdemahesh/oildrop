@@ -4,7 +4,7 @@ import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
 import { db, functions } from '../firebase';
 
-interface InventoryItem { id: string; brand: string; name: string; volumeMl: number; quantity: number; createdAt?: unknown; }
+interface InventoryItem { id: string; brand: string; name: string; volumeMl: number; quantity: number; purchasePrice?: number; sellingPrice?: number; createdAt?: unknown; }
 
 const Inventory: React.FC = () => {
   const [items, setItems] = useState<InventoryItem[]>([]);
@@ -14,9 +14,11 @@ const Inventory: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(0);
   const [showAdd, setShowAdd] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editValues, setEditValues] = useState<{brand:string; name:string; volumeMl:number; quantity:number}>({brand:'',name:'',volumeMl:0,quantity:0});
+  const [editValues, setEditValues] = useState<{brand:string; name:string; volumeMl:number; quantity:number; purchasePrice:number; sellingPrice:number}>({brand:'',name:'',volumeMl:0,quantity:0,purchasePrice:0,sellingPrice:0});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [purchasePrice, setPurchasePrice] = useState<number>(0);
+  const [sellingPrice, setSellingPrice] = useState<number>(0);
   interface ImportResult { count: number; results: { index: number; status: string; id?: string; error?: string }[] }
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
 
@@ -31,15 +33,19 @@ const Inventory: React.FC = () => {
 
   const addItem = async () => {
     setError(null);
-    if (!brand.trim() || !name.trim() || volumeMl <= 0 || quantity < 0) {
-      setError('Fill all fields (volume > 0, quantity >= 0)');
+    if (!brand.trim() || !name.trim() || volumeMl <= 0 || quantity < 0 || purchasePrice < 0 || sellingPrice < 0) {
+      setError('Fill all fields (volume > 0, quantity >= 0, prices >= 0)');
+      return;
+    }
+    if (sellingPrice < purchasePrice) {
+      setError('Selling price must be >= purchase price');
       return;
     }
     setSubmitting(true);
     try {
       const fn = httpsCallable(functions, 'addInventoryItem');
-      await fn({ brand: brand.trim(), name: name.trim(), volumeMl, quantity });
-      setBrand(''); setName(''); setVolumeMl(0); setQuantity(0); setShowAdd(false);
+      await fn({ brand: brand.trim(), name: name.trim(), volumeMl, quantity, purchasePrice, sellingPrice });
+      setBrand(''); setName(''); setVolumeMl(0); setQuantity(0); setPurchasePrice(0); setSellingPrice(0); setShowAdd(false);
     } catch (e:any) {
       setError(e.message || 'Failed to add');
     } finally {
@@ -49,7 +55,14 @@ const Inventory: React.FC = () => {
 
   const startEdit = (item: InventoryItem) => {
     setEditingId(item.id);
-    setEditValues({ brand: item.brand, name: item.name, volumeMl: item.volumeMl, quantity: item.quantity });
+    setEditValues({
+      brand: item.brand,
+      name: item.name,
+      volumeMl: item.volumeMl,
+      quantity: item.quantity,
+      purchasePrice: item.purchasePrice ?? 0,
+      sellingPrice: item.sellingPrice ?? 0
+    });
   };
 
   const cancelEdit = () => {
@@ -58,12 +71,13 @@ const Inventory: React.FC = () => {
 
   const saveEdit = async () => {
     if (!editingId) return;
-    const { brand, name, volumeMl, quantity } = editValues;
-    if (!brand.trim() || !name.trim() || volumeMl <= 0 || quantity < 0) { setError('Invalid values'); return; }
+    const { brand, name, volumeMl, quantity, purchasePrice, sellingPrice } = editValues;
+    if (!brand.trim() || !name.trim() || volumeMl <= 0 || quantity < 0 || purchasePrice < 0 || sellingPrice < 0) { setError('Invalid values'); return; }
+    if (sellingPrice < purchasePrice) { setError('Selling price must be >= purchase price'); return; }
     setSubmitting(true); setError(null);
     try {
       const fn = httpsCallable(functions, 'updateInventoryItem');
-      await fn({ id: editingId, brand: brand.trim(), name: name.trim(), volumeMl, quantity });
+      await fn({ id: editingId, brand: brand.trim(), name: name.trim(), volumeMl, quantity, purchasePrice, sellingPrice });
       setEditingId(null);
     } catch (e:any) {
       setError(e.message || 'Update failed');
@@ -89,7 +103,7 @@ const Inventory: React.FC = () => {
   };
 
   const exportJson = () => {
-    const exported = items.map(({ id, createdAt, ...rest }) => rest); // match import schema (brand,name,volumeMl,quantity)
+    const exported = items.map(({ id, createdAt, ...rest }) => rest); // now includes purchasePrice & sellingPrice if present
     const blob = new Blob([JSON.stringify(exported, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -99,10 +113,10 @@ const Inventory: React.FC = () => {
 
   const exportCsv = () => {
     if (!items.length) return;
-    const headers = ['brand','name','volumeMl','quantity'];
+    const headers = ['brand','name','volumeMl','quantity','purchasePrice','sellingPrice'];
     const lines = [headers.join(',')];
     items.forEach(it => {
-      const row = [it.brand, it.name, it.volumeMl, it.quantity].map(v => {
+      const row = [it.brand, it.name, it.volumeMl, it.quantity, it.purchasePrice ?? '', it.sellingPrice ?? ''].map(v => {
         const s = String(v);
         return /[",\n]/.test(s) ? '"' + s.replace(/"/g,'""') + '"' : s;
       }).join(',');
@@ -170,6 +184,14 @@ const Inventory: React.FC = () => {
               <label htmlFor="qty" className="text-xs text-slate-400 mb-1">Quantity (items)</label>
               <input id="qty" type="number" className="input input-sm input-bordered bg-slate-900 w-32" value={quantity||''} onChange={e=>setQuantity(parseInt(e.target.value,10)||0)} />
             </div>
+            <div className="flex flex-col">
+              <label htmlFor="pprice" className="text-xs text-slate-400 mb-1">Purchase Price</label>
+              <input id="pprice" type="number" step="0.01" className="input input-sm input-bordered bg-slate-900 w-32" value={purchasePrice||''} onChange={e=>setPurchasePrice(parseFloat(e.target.value)||0)} />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="sprice" className="text-xs text-slate-400 mb-1">Selling Price</label>
+              <input id="sprice" type="number" step="0.01" className="input input-sm input-bordered bg-slate-900 w-32" value={sellingPrice||''} onChange={e=>setSellingPrice(parseFloat(e.target.value)||0)} />
+            </div>
             <button onClick={addItem} disabled={submitting} className="btn btn-primary btn-sm mt-5">{submitting? 'Saving...' : 'Add Item'}</button>
           </div>
         )}
@@ -188,6 +210,8 @@ const Inventory: React.FC = () => {
                 <th>Name</th>
                 <th>Volume (ml)</th>
                 <th>Quantity</th>
+                <th>Purchase Price</th>
+                <th>Selling Price</th>
                 <th className="w-40 print:hidden">Actions</th>
               </tr>
             </thead>
@@ -224,6 +248,16 @@ const Inventory: React.FC = () => {
                       )}
                     </div>
                   </td>
+                  <td>
+                    {editingId === it.id ? (
+                      <input type="number" step="0.01" className="input input-xs bg-slate-900 w-24" value={editValues.purchasePrice||''} onChange={e=>setEditValues(v=>({...v,purchasePrice:parseFloat(e.target.value)||0}))} />
+                    ) : (it.purchasePrice ?? '-')}
+                  </td>
+                  <td>
+                    {editingId === it.id ? (
+                      <input type="number" step="0.01" className="input input-xs bg-slate-900 w-24" value={editValues.sellingPrice||''} onChange={e=>setEditValues(v=>({...v,sellingPrice:parseFloat(e.target.value)||0}))} />
+                    ) : (it.sellingPrice ?? '-')}
+                  </td>
                   <td className="print:hidden">
                     {editingId === it.id ? (
                       <div className="flex gap-2">
@@ -241,7 +275,7 @@ const Inventory: React.FC = () => {
               ))}
               {!items.length && (
                 <tr>
-                  <td colSpan={5} className="text-center py-10 text-slate-500 text-sm">No inventory yet</td>
+                  <td colSpan={7} className="text-center py-10 text-slate-500 text-sm">No inventory yet</td>
                 </tr>
               )}
             </tbody>
