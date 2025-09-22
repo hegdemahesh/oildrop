@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Nav from '../components/Nav';
 import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { httpsCallable } from 'firebase/functions';
@@ -9,6 +10,7 @@ interface Customer { id: string; name: string; phone?: string | null; altPhone?:
 
 const Customers: React.FC = () => {
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [altPhone, setAltPhone] = useState('');
@@ -253,6 +255,7 @@ const Customers: React.FC = () => {
                     </div>
                     <div className="mt-auto pt-2 flex gap-2 print:hidden">
                       <button className="btn btn-xs btn-primary" onClick={()=>openSale(c)}>Sale</button>
+                      <button className="btn btn-xs" onClick={()=>navigate(`/customers/${c.id}`)}>View</button>
                     </div>
                   </>
                 )}

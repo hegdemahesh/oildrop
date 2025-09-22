@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './auth/AuthContext';
 import Dashboard from './pages/Dashboard';
 import Inventory from './pages/Inventory';
 import Customers from './pages/Customers';
+import CustomerDetail from './pages/CustomerDetail';
 import Sales from './pages/Sales';
 import Login from './pages/Login';
 
@@ -22,6 +23,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Protected><Dashboard /></Protected>} />
         <Route path="/inventory" element={<Protected><Inventory /></Protected>} />
         <Route path="/customers" element={<Protected><Customers /></Protected>} />
+  <Route path="/customers/:id" element={<Protected><CustomerDetail /></Protected>} />
         <Route path="/sales" element={<Protected><Sales /></Protected>} />
       </Routes>
     </AuthProvider>
