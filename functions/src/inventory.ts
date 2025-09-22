@@ -1,5 +1,5 @@
-import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { getFirestore, FieldValue } from 'firebase-admin/firestore';
 
 interface InventoryInput {
   brand: string;
@@ -25,8 +25,8 @@ export const addInventoryItem = functions.region('us-central1').https.onCall(asy
   try {
     if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
     validateItem(data);
-    const db = admin.firestore();
-    const now = admin.firestore.FieldValue.serverTimestamp();
+  const db = getFirestore();
+  const now = FieldValue.serverTimestamp();
     const doc = await db.collection(COLLECTION).add({
       brand: data.brand.trim(),
       name: data.name.trim(),
@@ -47,9 +47,9 @@ export const bulkImportInventory = functions.region('us-central1').https.onCall(
   try {
     if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
     if (!Array.isArray(data)) throw new functions.https.HttpsError('invalid-argument', 'Expected array');
-    const db = admin.firestore();
-    const batch = db.batch();
-    const now = admin.firestore.FieldValue.serverTimestamp();
+  const db = getFirestore();
+  const batch = db.batch();
+  const now = FieldValue.serverTimestamp();
 
     const results: { index: number; status: 'ok' | 'error'; id?: string; error?: string }[] = [];
     data.forEach((raw, idx) => {
