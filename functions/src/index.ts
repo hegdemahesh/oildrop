@@ -14,8 +14,9 @@ export const invoiceCreated = functions.firestore
 
 export const gstSummaryHttp = functions.region('us-central1').https.onRequest(gstSummary);
 
-export const ping = functions.region('us-central1').https.onRequest((req: functions.https.Request, res: functions.Response<any>) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+export const ping = functions.region('us-central1').https.onCall(async (_data, context) => {
+  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Auth required');
+  return { status: 'ok', user: context.auth.uid, time: new Date().toISOString() };
 });
 
 export { addInventoryItem, bulkImportInventory, updateInventoryItem, deleteInventoryItem, adjustInventoryQuantity, addCustomer, updateCustomer, deleteCustomer, addSale, recordPayment, updateSale, deleteSale };
