@@ -1,0 +1,6 @@
+Public folder note: Vite serves root. PWA icons referenced in manifest must exist in dist root after build.
+Add the following PNGs to the project root (or place them in /public if created):
+- pwa-192x192.png
+- pwa-512x512.png
+- pwa-512x512-maskable.png
+Currently not provided; add appropriately sized square icons.
